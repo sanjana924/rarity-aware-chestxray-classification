@@ -1,0 +1,11 @@
+Job ID: 60630096
+Start time: Sat Oct 31 03:46:30 PM PDT 2026
+Models: ['1gpu_default', '1gpu_rarity', '2gpu_default', '2gpu_rarity']
+Validation predictions done.
+Test predictions done.
+Test set results:
+1gpu_default: AUROC=0.7797, AUPRC=0.2346, precision=0.2590, recall=0.3648, F1=0.2841, accuracy=0.8670, rare AUROC=0.7802, rare F1=0.1135
+1gpu_rarity: AUROC=0.7849, AUPRC=0.2442, precision=0.2757, recall=0.3679, F1=0.2979, accuracy=0.8720, rare AUROC=0.8015, rare F1=0.1710
+2gpu_default: AUROC=0.7698, AUPRC=0.2235, precision=0.2556, recall=0.3690, F1=0.2816, accuracy=0.8650, rare AUROC=0.7656, rare F1=0.1393
+2gpu_rarity: AUROC=0.7880, AUPRC=0.2477, precision=0.2489, recall=0.4209, F1=0.3026, accuracy=0.8552, rare AUROC=0.8075, rare F1=0.1756
+End time: Sat Oct 31 03:47:55 PM PDT 2026

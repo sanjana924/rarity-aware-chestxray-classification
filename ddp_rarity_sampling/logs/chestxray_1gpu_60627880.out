@@ -1,0 +1,10 @@
+Job ID: 60627880
+Start time: Sat Oct 31 02:03:41 PM PDT 2026
+Node: nid008612
+GPU: NVIDIA A100-SXM4-80GB
+GPUs: 1, per-GPU batch: 16, global batch: 16, lr: 0.0001, sampler: rarity
+Pretrained ImageNet weights loaded!
+Epoch 1: loss=0.1660, train_seconds=467.81, images_per_sec=166.71, gpu_hours=0.1299
+Validation mean AUROC: 0.8167
+Training completed.
+End time: Sat Oct 31 02:12:43 PM PDT 2026
