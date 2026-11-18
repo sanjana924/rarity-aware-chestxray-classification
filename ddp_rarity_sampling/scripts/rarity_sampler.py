@@ -11,6 +11,23 @@ class RarityAwareSampler(Sampler):
     def __init__(self, df, batch_size, rare_per_batch=2,
                  num_replicas=1, rank=0, seed=42):
         self.batch_size = batch_size
+        
+        # Validate sampler configuration before training.
+        if batch_size <= 0:
+            raise ValueError("batch_size must be greater than 0")
+
+        if not 0 <= rare_per_batch <= batch_size:
+            raise ValueError(
+                "rare_per_batch must be between 0 and batch_size"
+            )
+
+        if num_replicas <= 0:
+            raise ValueError("num_replicas must be greater than 0")
+
+        if not 0 <= rank < num_replicas:
+            raise ValueError(
+                "rank must be between 0 and num_replicas - 1"
+            )
         self.rare_per_batch = rare_per_batch
         self.num_replicas = num_replicas
         self.rank = rank
