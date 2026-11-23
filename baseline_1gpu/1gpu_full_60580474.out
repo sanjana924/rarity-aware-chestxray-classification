@@ -1,0 +1,9 @@
+Job ID: 60580474
+Start time: Fri Oct 30 11:22:52 PM PDT 2026
+Node: nid008233
+GPU: NVIDIA A100-SXM4-80GB
+Pretrained ImageNet weights loaded!
+Epoch 1: loss=0.1439, train_seconds=487.87, images_per_sec=159.85
+Validation mean AUROC: 0.8096
+Training completed.
+End time: Fri Oct 30 11:32:10 PM PDT 2026
