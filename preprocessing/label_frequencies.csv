@@ -1,0 +1,15 @@
+Finding,Train_Count,Validation_Count,Test_Count,Train_Percentage
+Hernia,122,19,86,0.156
+Pneumonia,782,94,555,1.003
+Fibrosis,1111,140,435,1.425
+Edema,1253,125,925,1.607
+Emphysema,1317,106,1093,1.689
+Cardiomegaly,1549,158,1069,1.986
+Pleural_Thickening,1997,245,1143,2.561
+Pneumothorax,2394,243,2665,3.07
+Consolidation,2584,268,1815,3.313
+Mass,3646,388,1748,4.675
+Nodule,4247,461,1623,5.446
+Atelectasis,7405,875,3279,9.495
+Effusion,7852,807,4658,10.068
+Infiltration,12480,1302,6112,16.002
