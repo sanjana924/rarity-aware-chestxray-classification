@@ -1,0 +1,71 @@
+GPU: NVIDIA A100-SXM4-80GB
+GPUs: 1, per-GPU batch: 64, global batch: 64, lr: 0.0001, lr scale: linear, warmup epochs: 1.0, sampler: default, rare per batch: 8, epochs: 20, seed: 0, workers: 8
+Pretrained ImageNet weights loaded!
+Steps per epoch: 1219, warmup steps: 1219
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 1: loss=0.2543, train_seconds=142.71, images_per_sec=546.49, gpu_hours=0.0396, val_auroc=0.7858
+Saved best checkpoint (epoch 1)
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 2: loss=0.1342, train_seconds=146.89, images_per_sec=530.93, gpu_hours=0.0408, val_auroc=0.8169
+Saved best checkpoint (epoch 2)
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 3: loss=0.1268, train_seconds=146.13, images_per_sec=533.69, gpu_hours=0.0406, val_auroc=0.8243
+Saved best checkpoint (epoch 3)
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 4: loss=0.1195, train_seconds=145.75, images_per_sec=535.09, gpu_hours=0.0405, val_auroc=0.8266
+Saved best checkpoint (epoch 4)
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 5: loss=0.1097, train_seconds=147.61, images_per_sec=528.33, gpu_hours=0.0410, val_auroc=0.8140
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 6: loss=0.0963, train_seconds=147.09, images_per_sec=530.19, gpu_hours=0.0409, val_auroc=0.8077
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 7: loss=0.0788, train_seconds=145.66, images_per_sec=535.40, gpu_hours=0.0405, val_auroc=0.7806
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 8: loss=0.0593, train_seconds=146.81, images_per_sec=531.22, gpu_hours=0.0408, val_auroc=0.7699
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 9: loss=0.0425, train_seconds=145.35, images_per_sec=536.57, gpu_hours=0.0404, val_auroc=0.7535
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 10: loss=0.0317, train_seconds=145.87, images_per_sec=534.63, gpu_hours=0.0405, val_auroc=0.7519
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 11: loss=0.0244, train_seconds=233.01, images_per_sec=334.70, gpu_hours=0.0647, val_auroc=0.7447
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 12: loss=0.0212, train_seconds=147.82, images_per_sec=527.58, gpu_hours=0.0411, val_auroc=0.7366
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 13: loss=0.0184, train_seconds=146.93, images_per_sec=530.78, gpu_hours=0.0408, val_auroc=0.7311
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 14: loss=0.0169, train_seconds=146.12, images_per_sec=533.73, gpu_hours=0.0406, val_auroc=0.7376
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 15: loss=0.0159, train_seconds=146.34, images_per_sec=532.91, gpu_hours=0.0407, val_auroc=0.7480
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 16: loss=0.0144, train_seconds=147.38, images_per_sec=529.18, gpu_hours=0.0409, val_auroc=0.7390
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 17: loss=0.0142, train_seconds=146.10, images_per_sec=533.79, gpu_hours=0.0406, val_auroc=0.7390
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 18: loss=0.0134, train_seconds=146.91, images_per_sec=530.87, gpu_hours=0.0408, val_auroc=0.7454
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 19: loss=0.0127, train_seconds=146.73, images_per_sec=531.50, gpu_hours=0.0408, val_auroc=0.7309
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 20: loss=0.0118, train_seconds=145.89, images_per_sec=534.57, gpu_hours=0.0405, val_auroc=0.7359
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Training completed. best_val_auroc=0.8266, total_train_seconds=3013.11, total_gpu_hours=0.8370
