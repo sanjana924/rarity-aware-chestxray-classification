@@ -1,0 +1,9 @@
+Job ID: 61900136
+Start time: Mon Nov 23 06:04:35 PM PST 2026
+GPU: NVIDIA A100-SXM4-40GB
+GPU: NVIDIA A100-SXM4-40GB
+Pretrained ImageNet weights loaded!
+Epoch 1: loss=0.2022, train_seconds=17.99, images_per_sec=227.63
+Validation mean AUROC: 0.6579
+Training completed.
+End time: Mon Nov 23 06:05:32 PM PST 2026

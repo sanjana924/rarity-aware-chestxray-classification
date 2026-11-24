@@ -1,0 +1,15 @@
+disease,auroc
+Atelectasis,0.7305084745762712
+Cardiomegaly,0.6653333333333333
+Consolidation,nan
+Edema,nan
+Effusion,0.845336481700118
+Emphysema,0.42133333333333334
+Fibrosis,0.8024193548387096
+Hernia,nan
+Infiltration,0.6079727564102564
+Mass,0.5745920745920745
+Nodule,0.5802987861811391
+Pleural_Thickening,0.728
+Pneumonia,nan
+Pneumothorax,0.6232040229885057
