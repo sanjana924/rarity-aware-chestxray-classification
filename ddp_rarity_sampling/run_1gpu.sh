@@ -5,8 +5,8 @@
 #SBATCH -N 1
 #SBATCH --ntasks-per-node=1
 #SBATCH --gpus-per-node=1
-#SBATCH --cpus-per-task=32
-#SBATCH -t 00:30:00
+#SBATCH --cpus-per-task=64
+#SBATCH -t 03:00:00
 #SBATCH -J chestxray_1gpu
 #SBATCH -o logs/%x_%j.out
 #SBATCH -e logs/%x_%j.err
@@ -22,9 +22,11 @@ nvidia-smi --query-gpu=timestamp,index,utilization.gpu,memory.used --format=csv 
 SMI_PID=$!
 
 srun torchrun --standalone --nproc_per_node=1 scripts/train_ddp.py \
+    --epochs ${EPOCHS:-1} --seed ${SEED:-0} \
     --max-train ${MAXTRAIN:-0} --max-val ${MAXVAL:-0} \
-    --batch-size 16 --workers 4 --lr 1e-4 \
-    --sampler ${SAMPLER:-default}
+    --batch-size ${BATCH:-64} --workers ${WORKERS:-8} --lr 1e-4 \
+    --lr-scale ${LRSCALE:-linear} --warmup-epochs ${WARMUP:-1} \
+    --sampler ${SAMPLER:-default} --rare-per-batch ${RPB:-8}
 
 kill $SMI_PID
 echo "End time: $(date)"

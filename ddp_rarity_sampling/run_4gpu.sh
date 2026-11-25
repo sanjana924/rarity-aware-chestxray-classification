@@ -1,0 +1,32 @@
+#!/bin/bash
+#SBATCH -A m4431_g
+#SBATCH -C gpu&hbm80g
+#SBATCH -q regular
+#SBATCH -N 1
+#SBATCH --ntasks-per-node=1
+#SBATCH --gpus-per-node=4
+#SBATCH --cpus-per-task=64
+#SBATCH -t 03:00:00
+#SBATCH -J chestxray_4gpu
+#SBATCH -o logs/%x_%j.out
+#SBATCH -e logs/%x_%j.err
+
+module load pytorch
+cd $SCRATCH/DDL_ChestXray
+
+echo "Job ID: $SLURM_JOB_ID"
+echo "Start time: $(date)"
+echo "Node: $(hostname)"
+
+nvidia-smi --query-gpu=timestamp,index,utilization.gpu,memory.used --format=csv -l 5 > logs/gpu_util_${SLURM_JOB_ID}.csv &
+SMI_PID=$!
+
+srun torchrun --standalone --nproc_per_node=4 scripts/train_ddp.py \
+    --epochs ${EPOCHS:-1} --seed ${SEED:-0} \
+    --max-train ${MAXTRAIN:-0} --max-val ${MAXVAL:-0} \
+    --batch-size ${BATCH:-64} --workers ${WORKERS:-8} --lr 1e-4 \
+    --lr-scale ${LRSCALE:-linear} --warmup-epochs ${WARMUP:-1} \
+    --sampler ${SAMPLER:-default} --rare-per-batch ${RPB:-8}
+
+kill $SMI_PID
+echo "End time: $(date)"

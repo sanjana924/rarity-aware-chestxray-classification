@@ -1,0 +1,10 @@
+GPU: NVIDIA A100-SXM4-80GB
+GPUs: 1, per-GPU batch: 64, global batch: 64, lr: 0.0001, lr scale: linear, warmup steps: 500, sampler: default, rare per batch: 2, epochs: 1, seed: 0, workers: 8
+Pretrained ImageNet weights loaded!
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Epoch 1: loss=0.4049, train_seconds=32.90, images_per_sec=607.96, gpu_hours=0.0091, val_auroc=0.6752
+Saved best checkpoint (epoch 1)
+/global/common/software/nersc9/pytorch/2.13.0/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Training completed. best_val_auroc=0.6752, total_train_seconds=32.90, total_gpu_hours=0.0091

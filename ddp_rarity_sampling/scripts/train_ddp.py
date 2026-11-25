@@ -1,4 +1,3 @@
-
 import argparse
 import csv
 import os
@@ -51,13 +50,16 @@ def evaluate(model, loader, device):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--epochs", type=int, default=1)
-    parser.add_argument("--batch-size", type=int, default=16)
+    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--max-train", type=int, default=128)
     parser.add_argument("--max-val", type=int, default=128)
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--lr", type=float, default=1e-4)
+    parser.add_argument("--lr-scale", choices=["linear", "sqrt", "none"], default="linear")
+    parser.add_argument("--warmup-epochs", type=float, default=0.0)
     parser.add_argument("--sampler", choices=["default", "rarity"], default="default")
-    parser.add_argument("--rare-per-batch", type=int, default=2)
+    parser.add_argument("--rare-per-batch", type=int, default=8)
     args = parser.parse_args()
 
     dist.init_process_group("nccl")
@@ -68,17 +70,32 @@ def main():
     device = torch.device("cuda", local_rank)
     is_main = rank == 0
 
-    torch.manual_seed(42)
-    np.random.seed(42)
+    torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
 
-    lr = args.lr * world_size
+    if args.lr_scale == "sqrt":
+        lr = args.lr * world_size ** 0.5
+    elif args.lr_scale == "none":
+        lr = args.lr
+    else:
+        lr = args.lr * world_size
+
     tag = f"{world_size}gpu_{args.sampler}"
+    if args.sampler == "rarity" and args.rare_per_batch != 8:
+        tag += f"_rpb{args.rare_per_batch}"
+    if args.batch_size != 64:
+        tag += f"_bs{args.batch_size}"
+    if args.lr_scale != "linear":
+        tag += f"_{args.lr_scale}"
+    tag += f"_seed{args.seed}"
 
     if is_main:
         print("GPU:", torch.cuda.get_device_name(local_rank), flush=True)
         print(f"GPUs: {world_size}, per-GPU batch: {args.batch_size}, "
               f"global batch: {args.batch_size * world_size}, lr: {lr}, "
-              f"sampler: {args.sampler}", flush=True)
+              f"lr scale: {args.lr_scale}, warmup epochs: {args.warmup_epochs}, "
+              f"sampler: {args.sampler}, rare per batch: {args.rare_per_batch}, "
+              f"epochs: {args.epochs}, seed: {args.seed}, workers: {args.workers}", flush=True)
 
     train_data = ChestXrayDataset("train")
     val_data = ChestXrayDataset("val")
@@ -96,12 +113,12 @@ def main():
     if args.sampler == "rarity":
         train_sampler = RarityAwareSampler(
             train_df, args.batch_size, args.rare_per_batch,
-            num_replicas=world_size, rank=rank, seed=42
+            num_replicas=world_size, rank=rank, seed=args.seed
         )
     else:
         train_sampler = DistributedSampler(
             train_data, num_replicas=world_size, rank=rank,
-            shuffle=True, seed=42
+            shuffle=True, seed=args.seed
         )
 
     train_loader = DataLoader(
@@ -115,16 +132,30 @@ def main():
         pin_memory=True
     )
 
+    warmup_steps = int(args.warmup_epochs * len(train_loader))
+
     model = create_model(pretrained=True)
     model = nn.SyncBatchNorm.convert_sync_batchnorm(model).to(device)
     model = DDP(model, device_ids=[local_rank])
     criterion = nn.BCEWithLogitsLoss()
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
+    scheduler = torch.optim.lr_scheduler.LambdaLR(
+        optimizer,
+        lambda step: min(1.0, (step + 1) / warmup_steps) if warmup_steps > 0 else 1.0
+    )
     scaler = torch.amp.GradScaler("cuda")
 
     if is_main:
+        print(f"Steps per epoch: {len(train_loader)}, warmup steps: {warmup_steps}", flush=True)
         os.makedirs("results", exist_ok=True)
         os.makedirs("checkpoints", exist_ok=True)
+        with open(f"results/history_{tag}.csv", "w", newline="") as f:
+            csv.writer(f).writerow(
+                ["epoch", "loss", "train_seconds", "images_per_sec", "gpu_hours", "val_auroc"]
+            )
+
+    best_auc = -1.0
+    total_seconds = 0.0
 
     for epoch in range(args.epochs):
         train_sampler.set_epoch(epoch)
@@ -149,6 +180,7 @@ def main():
             scaler.scale(loss).backward()
             scaler.step(optimizer)
             scaler.update()
+            scheduler.step()
 
             total_loss += loss.item() * len(images)
             count += len(images)
@@ -156,39 +188,53 @@ def main():
         torch.cuda.synchronize()
         dist.barrier()
         elapsed = time.perf_counter() - start
+        total_seconds += elapsed
 
         stats = torch.tensor([total_loss, count], device=device, dtype=torch.float64)
         dist.all_reduce(stats)
         total_loss, count = stats[0].item(), stats[1].item()
 
         if is_main:
+            aucs, mean_auc = evaluate(model.module, val_loader, device)
             print(
                 f"Epoch {epoch+1}: "
                 f"loss={total_loss/count:.4f}, "
                 f"train_seconds={elapsed:.2f}, "
                 f"images_per_sec={count/elapsed:.2f}, "
-                f"gpu_hours={elapsed * world_size / 3600:.4f}",
+                f"gpu_hours={elapsed * world_size / 3600:.4f}, "
+                f"val_auroc={mean_auc:.4f}",
                 flush=True
             )
 
-            aucs, mean_auc = evaluate(model.module, val_loader, device)
-            print(f"Validation mean AUROC: {mean_auc:.4f}", flush=True)
+            with open(f"results/history_{tag}.csv", "a", newline="") as f:
+                csv.writer(f).writerow([
+                    epoch + 1, total_loss / count, elapsed,
+                    count / elapsed, elapsed * world_size / 3600, mean_auc
+                ])
 
-            with open(f"results/validation_auc_{tag}.csv", "w", newline="") as f:
-                writer = csv.writer(f)
-                writer.writerow(["disease", "auroc"])
-                for name, auc in aucs.items():
-                    writer.writerow([name, auc])
+            if mean_auc > best_auc:
+                best_auc = mean_auc
+                with open(f"results/validation_auc_{tag}.csv", "w", newline="") as f:
+                    writer = csv.writer(f)
+                    writer.writerow(["disease", "auroc"])
+                    for name, auc in aucs.items():
+                        writer.writerow([name, auc])
 
-            torch.save(
-                model.module.state_dict(),
-                f"checkpoints/densenet121_{tag}.pt"
-            )
+                torch.save(
+                    model.module.state_dict(),
+                    f"checkpoints/densenet121_{tag}.pt"
+                )
+                print(f"Saved best checkpoint (epoch {epoch+1})", flush=True)
 
         dist.barrier()
 
     if is_main:
-        print("Training completed.", flush=True)
+        print(
+            f"Training completed. best_val_auroc={best_auc:.4f}, "
+            f"total_train_seconds={total_seconds:.2f}, "
+            f"total_gpu_hours={total_seconds * world_size / 3600:.4f}",
+            flush=True
+        )
 
     dist.destroy_process_group()
 
