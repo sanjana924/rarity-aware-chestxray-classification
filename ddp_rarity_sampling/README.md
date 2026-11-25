@@ -12,7 +12,7 @@ Everyone uses these scripts for the final runs, so results are directly comparab
 | `scripts/rarity_sampler.py` | Rarity-aware sampler. Puts a fixed number of rare-finding images (Edema, Fibrosis, Pneumonia, Hernia) in every batch, split across GPUs. |
 | `scripts/eval_metrics.py` | Evaluates every checkpoint in `checkpoints/` on the validation and test sets (AUROC, AUPRC, precision, recall, F1, accuracy). |
 | `scripts/check_sampler.py` | Checks how many rare images appear per training step with each sampler. |
-| `run_1gpu.sh`, `run_2gpu.sh`, `run_4gpu.sh` | Slurm job scripts for 1, 2 and 4 GPUs. Settings are passed with `--export` (see below). |
+| `run_1gpu.sh`, `run_2gpu.sh`, `run_4gpu.sh`, `run_8gpu.sh` | Slurm job scripts for 1, 2, 4 and 8 GPUs. The 8-GPU configuration uses two nodes with four GPUs per node. Settings are passed with `--export` (see below). |
 | `run_eval.sh` | Slurm job script for `eval_metrics.py`. |
 | `pretrained/` | ImageNet DenseNet-121 weights. |
 | `logs/` | Slurm output, error and GPU utilization logs for every run. |
@@ -39,7 +39,8 @@ Everyone uses these scripts for the final runs, so results are directly comparab
 ## How to Run
 1. Copy this folder to your scratch space and add `dataset.py` and `model.py`:
 ```bash
-cp -r ddp_rarity_sampling $SCRATCH/DDL_ChestXray
+mkdir -p "$SCRATCH/DDL_ChestXray"
+cp -r ddp_rarity_sampling/. "$SCRATCH/DDL_ChestXray/"
 cp preprocessing/dataset.py preprocessing/model.py $SCRATCH/DDL_ChestXray/scripts/
 cd $SCRATCH/DDL_ChestXray
 mkdir -p logs results checkpoints
@@ -68,6 +69,33 @@ sbatch -t 01:00:00 --export=ALL,SAMPLER=rarity,EPOCHS=8,SEED=1 run_2gpu.sh
 - Sampler ratio experiment (1 GPU, rarity-aware): `RPB=4` and `RPB=16`
 - Fixed global batch experiment (global batch 256, `LRSCALE=none`): `BATCH=128` on 2 GPUs, `BATCH=64` on 4 GPUs, `BATCH=32` on 8 GPUs. For rarity-aware runs keep 12.5% rare: `RPB=16`, `RPB=8`, `RPB=4`.
 
+## 8-GPU Multi-Node Training
+
+The 8-GPU configuration uses two Perlmutter compute nodes with four NVIDIA A100 80GB GPUs per node. Slurm launches one torchrun instance per node, with four training processes per instance. PyTorch DDP synchronizes training across all eight GPUs.
+
+The master address and port are configured automatically using the Slurm node list and job ID. GPU utilization and memory usage are recorded separately for each node every five seconds.
+
+### Smoke Test
+
+Before running full experiments, submit a small test to verify multi-node communication, dataset loading, model initialization and result generation.
+
+```bash
+sbatch -t 00:15:00 --export=ALL,SAMPLER=default,EPOCHS=1,SEED=99,BATCH=64,WORKERS=8,LRSCALE=linear,WARMUP=1,MAXTRAIN=4096,MAXVAL=512 run_8gpu.sh
+```
+
+### Job Monitoring
+
+```bash
+squeue -u $USER
+sacct -j JOB_ID --format=JobID,State,Elapsed,ExitCode
+```
+
+Dependent jobs can be submitted using `--dependency=afterok:JOB_ID` so that subsequent experiments only start after the preceding job completes successfully.
+
+The script defaults to a 15-minute time limit for testing. Override the time limit with `sbatch -t` for full experiments. Smoke-test results should not be included in final performance comparisons.
+
+The multi-node script has passed Bash syntax validation. Runtime validation is pending completion of the submitted GPU jobs.
+
 ## Output Files
 Each run's files are named by GPU count, sampler and seed, for example `4gpu_rarity_seed2`. Extra settings are added to the name when they differ from the defaults (`_bs128`, `_rpb4`, `_none`, `_sqrt`).
 
@@ -78,6 +106,7 @@ Each run's files are named by GPU count, sampler and seed, for example `4gpu_rar
 | `results/history_<tag>.csv` | One row per epoch |
 | `results/validation_auc_<tag>.csv` | Per-disease validation AUROC at the best epoch |
 | `checkpoints/densenet121_<tag>.pt` | Best checkpoint |
+| `logs/gpu_util_<jobid>_<hostname>.csv` | Per-node GPU utilization and memory usage recorded every 5 seconds for 8-GPU runs. |
 
 ## Setup Tests
 ### Speed test (1 GPU, 20,000 images, 1 epoch)
