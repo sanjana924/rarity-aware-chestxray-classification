@@ -157,5 +157,56 @@ Results:
 - `results/lr_tests/validation_auc_8gpu_default_seed0.csv`
 - `results/lr_tests/validation_auc_8gpu_default_sqrt_seed0.csv`
 
+## 8-GPU Training Results (Seed 0)
+
+Default and rarity-aware sampling were compared using eight NVIDIA A100 80GB GPUs across two Perlmutter compute nodes. Both experiments used DenseNet-121 with pretrained ImageNet weights and the full preprocessed dataset.
+
+### Configuration
+
+- Epochs: 8
+- Seed: 0
+- Batch size per GPU: 64
+- Global batch size: 512
+- Learning rate: 0.0008 (linear scaling)
+- Warmup: 1 epoch
+- Data loader workers: 8 per GPU
+- Rare images per GPU batch: 8 (rarity-aware sampling only)
+
+### Results
+
+| Metric | Default | Rarity-Aware |
+|---|---:|---:|
+| Best validation AUROC | 0.8323 | 0.8163 |
+| Best checkpoint epoch | 4 | 2 |
+| Final validation AUROC | 0.8018 | 0.7647 |
+| Final training loss | 0.1045 | 0.0832 |
+| Total training time (s) | 377.98 | 421.42 |
+| Training GPU hours | 0.8400 | 0.9365 |
+| Allocated GPU hours | 1.1067 | 1.2333 |
+
+Default sampling achieved a higher best validation AUROC and required less training time. Rarity-aware sampling achieved a lower final training loss, but its validation AUROC decreased after epoch 2. This suggests possible overfitting. Additional seeds and per-disease evaluation are needed before drawing a final conclusion about rarity-aware sampling.
+
+### Rare Disease Validation AUROC
+
+| Disease | Default | Rarity-Aware |
+|---|---:|---:|
+| Edema | 0.9188 | 0.9164 |
+| Fibrosis | 0.8329 | 0.7910 |
+| Pneumonia | 0.7194 | 0.7183 |
+| Hernia | 0.9110 | 0.8686 |
+
+These results represent seed 0 only.
+
+### Saved Results
+
+- Training histories and per-disease AUROC: `results/final_8gpu/`
+- Slurm output, error, and GPU utilization logs: `logs/final_8gpu/`
+- Best model checkpoints are stored on Perlmutter.
+
+### Slurm Job IDs
+
+- Default sampling: 62022882
+- Rarity-aware sampling: 62023030
+
 ## Midterm Results (batch 16, 1 epoch)
 Earlier 1-GPU and 2-GPU runs with batch 16 and one epoch are kept for reference in `logs/` and `results/` (files without a seed in the name). These used the original 1024 x 1024 images and the earlier version of the training script.
