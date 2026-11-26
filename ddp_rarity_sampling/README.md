@@ -27,8 +27,7 @@ Everyone uses these scripts for the final runs, so results are directly comparab
 | Model | DenseNet-121, ImageNet pretrained |
 | Images | 224 x 224 preprocessed images (`processed_images/`) |
 | Batch size | 64 per GPU (global 64 / 128 / 256 / 512 on 1 / 2 / 4 / 8 GPUs) |
-| Base learning rate | 0.0001 at 1 GPU, scaled with GPU count (rule set by the learning-rate test) |
-| Warmup | 1 epoch |
+| Base learning rate | 0.0001 at 1 GPU, using linear scaling (0.0002, 0.0004, and 0.0008 for 2, 4, and 8 GPUs) || Warmup | 1 epoch |
 | Epochs | 8, keeping the checkpoint with the best validation AUROC |
 | Rarity-aware sampling | 8 rare-finding images per batch of 64 (12.5%) |
 | Data loader workers | 8 per GPU |
@@ -120,6 +119,43 @@ More data loader workers barely changed throughput. Batch 64 was 2.8x faster, so
 
 ### Epoch test (1 GPU, full data, 20 epochs, default sampling)
 Validation AUROC peaked at epoch 4 (0.827) and then fell to about 0.73 by epoch 20, while training loss kept dropping. The model starts overfitting after about 4 epochs, so final runs use 8 epochs and keep the best checkpoint. Results: `results/epoch_test_history_1gpu.csv`.
+
+### Learning Rate Scaling Test (8 GPUs, full dataset, 2 epochs)
+
+Linear and square root learning-rate scaling were compared using 8 NVIDIA A100 80GB GPUs across two Perlmutter compute nodes. Both runs used DenseNet-121 with pretrained ImageNet weights, default sampling, a batch size of 64 per GPU (global batch size of 512), 8 data loader workers per GPU, seed 0, and one warmup epoch.
+
+| Metric | Linear Scaling | Square Root Scaling |
+|---|---:|---:|
+| Learning rate | 0.0008 | 0.00028284 |
+| Epoch 1 training loss | 0.2423 | 0.3132 |
+| Epoch 2 training loss | 0.1346 | 0.1383 |
+| Epoch 1 validation AUROC | 0.7828 | 0.7611 |
+| Epoch 2 validation AUROC | 0.8152 | 0.8038 |
+| Epoch 1 images/sec | 2003.03 | 1685.06 |
+| Epoch 2 images/sec | 1462.31 | 1395.39 |
+| Total training time (s) | 92.27 | 102.18 |
+| Total training GPU hours | 0.2050 | 0.2271 |
+
+Linear scaling achieved a higher validation AUROC, lower training loss, and higher throughput in both epochs. It also reduced total training time and training GPU hours by approximately 9.7% compared to square root scaling.
+
+Based on these preliminary results, linear scaling is selected for the main GPU scaling experiments. The comparison was conducted using two epochs and one seed.
+
+The learning rate is calculated by multiplying the base learning rate (0.0001) by the number of GPUs.
+
+| Number of GPUs | Global Batch Size | Learning Rate |
+|---:|---:|---:|
+| 1 | 64 | 0.0001 |
+| 2 | 128 | 0.0002 |
+| 4 | 256 | 0.0004 |
+| 8 | 512 | 0.0008 |
+
+All main GPU scaling experiments will use one warmup epoch. The fixed global batch size experiment will continue to use `LRSCALE=none`.
+
+Results:
+- `results/lr_tests/history_8gpu_default_seed0.csv`
+- `results/lr_tests/history_8gpu_default_sqrt_seed0.csv`
+- `results/lr_tests/validation_auc_8gpu_default_seed0.csv`
+- `results/lr_tests/validation_auc_8gpu_default_sqrt_seed0.csv`
 
 ## Midterm Results (batch 16, 1 epoch)
 Earlier 1-GPU and 2-GPU runs with batch 16 and one epoch are kept for reference in `logs/` and `results/` (files without a seed in the name). These used the original 1024 x 1024 images and the earlier version of the training script.
