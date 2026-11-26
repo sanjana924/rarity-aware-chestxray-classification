@@ -1,0 +1,49 @@
+Job ID: 61978990
+Start time: Wed Nov 25 07:55:52 PM PST 2026
+Nodes: nid[008424,008692]
+Master address: nid008424
+Master port: 38990
+Sampler: default
+Epochs: 2
+Seed: 0
+Batch per GPU: 64
+LR scaling: linear
+Warmup epochs: 1
+Max train: 0
+Max val: 0
+Starting node nid008692, rank 1
+Starting node nid008424, rank 0
+GPU: NVIDIA A100-SXM4-80GB
+GPUs: 8, per-GPU batch: 64, global batch: 512, lr: 0.0008, lr scale: linear, warmup epochs: 1.0, sampler: default, rare per batch: 8, epochs: 2, seed: 0, workers: 8
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+NCCL version 2.29.7+cuda13.2
+
+[2026-11-25 19:56:14] nid008424:1933440:1933440 [3] misc/ibvwrap.cc:173 NCCL WARN lib wrapper not initialized.
+
+[2026-11-25 19:56:14] nid008424:1933438:1933438 [1] misc/ibvwrap.cc:173 NCCL WARN lib wrapper not initialized.
+
+[2026-11-25 19:56:14] nid008424:1933439:1933439 [2] misc/ibvwrap.cc:173 NCCL WARN lib wrapper not initialized.
+
+[2026-11-25 19:56:14] nid008424:1933437:1933437 [0] misc/ibvwrap.cc:173 NCCL WARN lib wrapper not initialized.
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+
+[2026-11-25 19:56:15] nid008692:702655:702655 [3] misc/ibvwrap.cc:173 NCCL WARN lib wrapper not initialized.
+
+[2026-11-25 19:56:15] nid008692:702654:702654 [2] misc/ibvwrap.cc:173 NCCL WARN lib wrapper not initialized.
+
+[2026-11-25 19:56:15] nid008692:702652:702652 [0] misc/ibvwrap.cc:173 NCCL WARN lib wrapper not initialized.
+
+[2026-11-25 19:56:15] nid008692:702653:702653 [1] misc/ibvwrap.cc:173 NCCL WARN lib wrapper not initialized.
+Steps per epoch: 153, warmup steps: 153
+Epoch 1: loss=0.2423, train_seconds=38.94, images_per_sec=2003.03, gpu_hours=0.0865, val_auroc=0.7828
+Saved best checkpoint (epoch 1)
+Epoch 2: loss=0.1346, train_seconds=53.33, images_per_sec=1462.31, gpu_hours=0.1185, val_auroc=0.8152
+Saved best checkpoint (epoch 2)
+Training completed. best_val_auroc=0.8152, total_train_seconds=92.27, total_gpu_hours=0.2050
+End time: Wed Nov 25 07:58:19 PM PST 2026
