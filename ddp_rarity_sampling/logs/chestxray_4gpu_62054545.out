@@ -1,0 +1,16 @@
+Job ID: 62054545
+Start time: Thu Nov 26 01:28:53 PM PST 2026
+Node: nid008361
+GPU: NVIDIA A100-SXM4-80GB
+GPUs: 4, per-GPU batch: 64, global batch: 256, lr: 0.0004, lr scale: linear, warmup epochs: 1.0, sampler: rarity, rare per batch: 8, epochs: 2, seed: 99, workers: 8
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+Steps per epoch: 32, warmup steps: 32
+Epoch 1: loss=0.4361, train_seconds=28.82, images_per_sec=284.20, gpu_hours=0.0320, val_auroc=0.6562
+Saved best checkpoint (epoch 1)
+Epoch 2: loss=0.1546, train_seconds=7.62, images_per_sec=1075.36, gpu_hours=0.0085, val_auroc=0.7187
+Saved best checkpoint (epoch 2)
+Training completed. best_val_auroc=0.7187, total_train_seconds=36.44, total_gpu_hours=0.0405
+End time: Thu Nov 26 01:33:18 PM PST 2026

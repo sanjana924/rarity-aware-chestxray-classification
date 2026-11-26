@@ -1,0 +1,22 @@
+Job ID: 62055480
+Start time: Thu Nov 26 01:42:41 PM PST 2026
+Node: nid008253
+GPU: NVIDIA A100-SXM4-80GB
+GPUs: 4, per-GPU batch: 64, global batch: 256, lr: 0.0004, lr scale: linear, warmup epochs: 1.0, sampler: rarity, rare per batch: 8, epochs: 8, seed: 1, workers: 8
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+Steps per epoch: 305, warmup steps: 305
+Epoch 1: loss=0.2578, train_seconds=74.14, images_per_sec=1051.91, gpu_hours=0.0824, val_auroc=0.8019
+Saved best checkpoint (epoch 1)
+Epoch 2: loss=0.1522, train_seconds=76.67, images_per_sec=1017.22, gpu_hours=0.0852, val_auroc=0.8177
+Saved best checkpoint (epoch 2)
+Epoch 3: loss=0.1381, train_seconds=88.04, images_per_sec=885.87, gpu_hours=0.0978, val_auroc=0.8059
+Epoch 4: loss=0.1219, train_seconds=80.77, images_per_sec=965.56, gpu_hours=0.0897, val_auroc=0.8066
+Epoch 5: loss=0.1072, train_seconds=69.34, images_per_sec=1124.72, gpu_hours=0.0770, val_auroc=0.7873
+Epoch 6: loss=0.0945, train_seconds=77.13, images_per_sec=1011.13, gpu_hours=0.0857, val_auroc=0.7858
+Epoch 7: loss=0.0817, train_seconds=69.68, images_per_sec=1119.17, gpu_hours=0.0774, val_auroc=0.7781
+Epoch 8: loss=0.0696, train_seconds=78.31, images_per_sec=995.86, gpu_hours=0.0870, val_auroc=0.7635
+Training completed. best_val_auroc=0.8177, total_train_seconds=614.08, total_gpu_hours=0.6823
+End time: Thu Nov 26 01:55:16 PM PST 2026
