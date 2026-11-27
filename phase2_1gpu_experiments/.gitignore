@@ -1,0 +1,14 @@
+
+# Model checkpoints
+checkpoints/
+
+# Slurm logs
+logs/
+
+# GPU monitoring and accounting files
+gpu_utilization/
+gpu_accounting/
+
+# Python-generated files
+__pycache__/
+*.pyc
