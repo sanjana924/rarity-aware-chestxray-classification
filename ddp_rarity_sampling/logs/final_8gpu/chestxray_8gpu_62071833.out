@@ -1,0 +1,55 @@
+Job ID: 62071833
+Start time: Thu Nov 26 08:03:21 PM PST 2026
+Nodes: nid[008313,008348]
+Master address: nid008313
+Master port: 31833
+Sampler: rarity
+Epochs: 8
+Seed: 1
+Batch per GPU: 64
+LR scaling: linear
+Warmup epochs: 1
+Max train: 0
+Max val: 0
+Starting node nid008313, rank 0
+Starting node nid008348, rank 1
+GPU: NVIDIA A100-SXM4-80GB
+GPUs: 8, per-GPU batch: 64, global batch: 512, lr: 0.0008, lr scale: linear, warmup epochs: 1.0, sampler: rarity, rare per batch: 8, epochs: 8, seed: 1, workers: 8
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+NCCL version 2.29.7+cuda13.2
+
+[2026-11-26 20:03:44] nid008313:2061461:2061461 [1] misc/ibvwrap.cc:173 NCCL WARN lib wrapper not initialized.
+
+[2026-11-26 20:03:44] nid008313:2061463:2061463 [3] misc/ibvwrap.cc:173 NCCL WARN lib wrapper not initialized.
+
+[2026-11-26 20:03:44] nid008313:2061460:2061460 [0] misc/ibvwrap.cc:173 NCCL WARN lib wrapper not initialized.
+
+[2026-11-26 20:03:44] nid008313:2061462:2061462 [2] misc/ibvwrap.cc:173 NCCL WARN lib wrapper not initialized.
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+Pretrained ImageNet weights loaded!
+
+[2026-11-26 20:03:48] nid008348:1586291:1586291 [1] misc/ibvwrap.cc:173 NCCL WARN lib wrapper not initialized.
+
+[2026-11-26 20:03:48] nid008348:1586292:1586292 [2] misc/ibvwrap.cc:173 NCCL WARN lib wrapper not initialized.
+
+[2026-11-26 20:03:48] nid008348:1586290:1586290 [0] misc/ibvwrap.cc:173 NCCL WARN lib wrapper not initialized.
+
+[2026-11-26 20:03:48] nid008348:1586293:1586293 [3] misc/ibvwrap.cc:173 NCCL WARN lib wrapper not initialized.
+Steps per epoch: 153, warmup steps: 153
+Epoch 1: loss=0.2539, train_seconds=45.64, images_per_sec=1708.89, gpu_hours=0.1014, val_auroc=0.7925
+Saved best checkpoint (epoch 1)
+Epoch 2: loss=0.1532, train_seconds=50.56, images_per_sec=1542.62, gpu_hours=0.1124, val_auroc=0.8158
+Saved best checkpoint (epoch 2)
+Epoch 3: loss=0.1418, train_seconds=52.62, images_per_sec=1482.31, gpu_hours=0.1169, val_auroc=0.8023
+Epoch 4: loss=0.1286, train_seconds=51.72, images_per_sec=1507.95, gpu_hours=0.1149, val_auroc=0.8071
+Epoch 5: loss=0.1158, train_seconds=50.39, images_per_sec=1547.77, gpu_hours=0.1120, val_auroc=0.7921
+Epoch 6: loss=0.1036, train_seconds=50.36, images_per_sec=1548.57, gpu_hours=0.1119, val_auroc=0.7901
+Epoch 7: loss=0.0927, train_seconds=55.62, images_per_sec=1402.11, gpu_hours=0.1236, val_auroc=0.7746
+Epoch 8: loss=0.0827, train_seconds=55.10, images_per_sec=1415.41, gpu_hours=0.1224, val_auroc=0.7679
+Training completed. best_val_auroc=0.8158, total_train_seconds=412.01, total_gpu_hours=0.9156
+End time: Thu Nov 26 08:12:15 PM PST 2026
